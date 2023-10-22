@@ -23,16 +23,16 @@
  */
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include <FramelessHelper/Core/utils.h>
+#include <FramelessHelper/Widgets/framelesswidgetshelper.h>
+#include <FramelessHelper/Widgets/standardsystembutton.h>
+#include <FramelessHelper/Widgets/standardtitlebar.h>
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qfileiconprovider.h>
-#include <FramelessHelper/Core/utils.h>
-#include <FramelessHelper/Widgets/standardtitlebar.h>
-#include <FramelessHelper/Widgets/standardsystembutton.h>
-#include <FramelessHelper/Widgets/framelesswidgetshelper.h>
+#include "../dialog/dialog.h"
 #include "../shared/settings.h"
 #include "../widget/widget.h"
-#include "../dialog/dialog.h"
+#include "ui_mainwindow.h"
 
 extern template void Settings::set<QRect>(const QString &, const QString &, const QRect &);
 extern template void Settings::set<qreal>(const QString &, const QString &, const qreal &);
@@ -50,15 +50,13 @@ FRAMELESSHELPER_STRING_CONSTANT(Geometry)
 FRAMELESSHELPER_STRING_CONSTANT(State)
 FRAMELESSHELPER_STRING_CONSTANT(DevicePixelRatio)
 
-MainWindow::MainWindow(QWidget *parent, const Qt::WindowFlags flags) : FramelessMainWindow(parent, flags)
-{
+MainWindow::MainWindow(QWidget *parent, const Qt::WindowFlags flags) : FramelessMainWindow(parent, flags) {
     initialize();
 }
 
 MainWindow::~MainWindow() = default;
 
-void MainWindow::closeEvent(QCloseEvent *event)
-{
+void MainWindow::closeEvent(QCloseEvent *event) {
     if (!parent()) {
         const QString id = objectName();
         Settings::set(id, kGeometry, geometry());
@@ -68,8 +66,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     FramelessMainWindow::closeEvent(event);
 }
 
-void MainWindow::initialize()
-{
+void MainWindow::initialize() {
 #if FRAMELESSHELPER_CONFIG(titlebar)
     m_titleBar = new StandardTitleBar(this);
     m_titleBar->setTitleLabelAlignment(Qt::AlignCenter);
@@ -77,8 +74,8 @@ void MainWindow::initialize()
     m_mainWindow = new Ui::MainWindow;
     m_mainWindow->setupUi(this);
 
-    QMenuBar * const mb = menuBar();
-    mb->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+    QMenuBar *const mb = menuBar();
+    mb->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
     mb->setStyleSheet(FRAMELESSHELPER_STRING_LITERAL(R"(
 QMenuBar {
     background-color: transparent;
@@ -99,7 +96,20 @@ QMenuBar::item:pressed {
 
 #if FRAMELESSHELPER_CONFIG(titlebar)
     const auto titleBarLayout = static_cast<QHBoxLayout *>(m_titleBar->layout());
-    titleBarLayout->insertWidget(0, mb);
+
+    // 创建一个占位符，即一个空的 QWidget，用于插入间距
+    //setWindowIcon(QFileIconProvider().icon(QFileIconProvider::Computer));
+    setWindowIcon(QIcon("C:\\Users\\17688\\source\\repos\\karl-app\\resources\\icon/app.ico"));
+    m_titleBar->setWindowIconVisible(false);
+    m_titleBar->setWindowIconSize(QSize(16, 16));
+    //     QWidget *spacerWidget = new QWidget;
+    QSize iconSize = m_titleBar->windowIconSize();
+    //     spacerWidget->setFixedSize(iconSize.width() + 16, iconSize.height() + 16);  // 设置占位符大小，以创建间距
+    //     titleBarLayout->insertWidget(0, spacerWidget);                              // 添加占位符
+    //     titleBarLayout->insertWidget(1, mb);
+    //     //
+    titleBarLayout->insertSpacing(0, iconSize.width() + 16);
+    titleBarLayout->insertWidget(1, mb);
     // setMenuWidget(): make the menu widget become the first row of the window.
     setMenuWidget(m_titleBar);
 #endif
@@ -107,49 +117,49 @@ QMenuBar::item:pressed {
 #if FRAMELESSHELPER_CONFIG(titlebar)
     FramelessWidgetsHelper *helper = FramelessWidgetsHelper::get(this);
     helper->setTitleBarWidget(m_titleBar);
-#  if (!defined(Q_OS_MACOS) && FRAMELESSHELPER_CONFIG(system_button))
+#if (!defined(Q_OS_MACOS) && FRAMELESSHELPER_CONFIG(system_button))
     helper->setSystemButton(m_titleBar->minimizeButton(), SystemButtonType::Minimize);
     helper->setSystemButton(m_titleBar->maximizeButton(), SystemButtonType::Maximize);
     helper->setSystemButton(m_titleBar->closeButton(), SystemButtonType::Close);
-#  endif
 #endif
-    helper->setHitTestVisible(mb); // IMPORTANT!
-
-    setWindowTitle(tr("FramelessHelper demo application - QMainWindow"));
-    setWindowIcon(QFileIconProvider().icon(QFileIconProvider::Computer));
-    connect(this, &MainWindow::objectNameChanged, this, [this](const QString &name){
-        if (name.isEmpty()) {
-            return;
-        }
-        setWindowTitle(windowTitle() + FRAMELESSHELPER_STRING_LITERAL(" [%1]").arg(name));
-    });
-    connect(m_mainWindow->pushButton, &QPushButton::clicked, this, [this]{
-        const auto dialog = new Dialog(this);
-        dialog->waitReady();
-        dialog->setAttribute(Qt::WA_DeleteOnClose);
-        dialog->exec();
-    });
-    connect(m_mainWindow->pushButton_2, &QPushButton::clicked, this, [this]{
-        const auto widget = new Widget(this);
-        widget->waitReady();
-        widget->setAttribute(Qt::WA_DeleteOnClose);
-        widget->show();
-    });
+#endif
+    helper->setHitTestVisible(mb);  // IMPORTANT!
+    setWindowTitle("hello world");
+    m_titleBar->show();
+    resize(200, 100);
+    //     connect(this, &MainWindow::objectNameChanged, this, [this](const QString &name) {
+    //         if (name.isEmpty()) {
+    //             return;
+    //         }
+    //         setWindowTitle(windowTitle() + FRAMELESSHELPER_STRING_LITERAL(" [%1]").arg(name));
+    //     });
+    //     connect(m_mainWindow->pushButton, &QPushButton::clicked, this, [this] {
+    //         const auto dialog = new Dialog(this);
+    //         dialog->waitReady();
+    //         dialog->setAttribute(Qt::WA_DeleteOnClose);
+    //         dialog->exec();
+    //     });
+    //     connect(m_mainWindow->pushButton_2, &QPushButton::clicked, this, [this] {
+    //         const auto widget = new Widget(this);
+    //         widget->waitReady();
+    //         widget->setAttribute(Qt::WA_DeleteOnClose);
+    //         widget->show();
+    //     });
 }
 
-void MainWindow::waitReady()
-{
+void MainWindow::waitReady() {
     FramelessWidgetsHelper *helper = FramelessWidgetsHelper::get(this);
     helper->waitForReady();
-    const QString id = objectName();
+    const QString id         = objectName();
     const auto savedGeometry = Settings::get<QRect>(id, kGeometry);
     if (savedGeometry.isValid() && !parent()) {
         const auto savedDpr = Settings::get<qreal>(id, kDevicePixelRatio);
         // Qt doesn't support dpr < 1.
         const qreal oldDpr = std::max(savedDpr, qreal(1));
-        const qreal scale = (devicePixelRatioF() / oldDpr);
+        const qreal scale  = (devicePixelRatioF() / oldDpr);
         setGeometry({savedGeometry.topLeft() * scale, savedGeometry.size() * scale});
-    } else {
+    }
+    else {
         helper->moveWindowToDesktopCenter();
     }
     const QByteArray savedState = Settings::get<QByteArray>(id, kState);

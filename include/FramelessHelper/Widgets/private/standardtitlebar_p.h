@@ -42,15 +42,13 @@ class StandardSystemButton;
 class ChromePalette;
 
 class StandardTitleBar;
-class FRAMELESSHELPER_WIDGETS_API StandardTitleBarPrivate : public QObject
-{
+class FRAMELESSHELPER_WIDGETS_API StandardTitleBarPrivate : public QObject {
     Q_OBJECT
     FRAMELESSHELPER_PRIVATE_QT_CLASS(StandardTitleBar)
 
 public:
-    struct FontMetrics
-    {
-        int width = 0;
+    struct FontMetrics {
+        int width  = 0;
         int height = 0;
         int ascent = 0;
     };
@@ -78,18 +76,19 @@ public:
 #if (!defined(Q_OS_MACOS) && FRAMELESSHELPER_CONFIG(system_button))
     StandardSystemButton *minimizeButton = nullptr;
     StandardSystemButton *maximizeButton = nullptr;
-    StandardSystemButton *closeButton = nullptr;
+    StandardSystemButton *closeButton    = nullptr;
+
 #endif
-    QPointer<QWidget> window = nullptr;
-    bool extended = false;
-    Qt::Alignment labelAlignment = {};
-    bool hideWhenClose = false;
-    ChromePalette *chromePalette = nullptr;
-    bool titleLabelVisible = true;
+    QPointer<QWidget> window            = nullptr;
+    bool extended                       = false;
+    Qt::Alignment labelAlignment        = {};
+    bool hideWhenClose                  = false;
+    ChromePalette *chromePalette        = nullptr;
+    bool titleLabelVisible              = true;
     std::optional<QSize> windowIconSize = std::nullopt;
-    bool windowIconVisible = false;
-    std::optional<QFont> titleFont = std::nullopt;
-    bool closeTriggered = false;
+    bool windowIconVisible              = false;
+    std::optional<QFont> titleFont      = std::nullopt;
+    bool closeTriggered                 = false;
 
 protected:
     bool eventFilter(QObject *object, QEvent *event) override;

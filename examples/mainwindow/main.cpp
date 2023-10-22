@@ -22,21 +22,20 @@
  * SOFTWARE.
  */
 
-#include <QtWidgets/qapplication.h>
 #include <FramelessHelper/Core/private/framelessconfig_p.h>
-#include "mainwindow.h"
+#include <QtWidgets/qapplication.h>
 #include "../shared/log.h"
+#include "mainwindow.h"
 
 FRAMELESSHELPER_USE_NAMESPACE
 
-#define CREATE_WINDOW(Name) \
-    const auto Name = std::make_unique<MainWindow>(); \
+#define CREATE_WINDOW(Name)                                     \
+    const auto Name = std::make_unique<MainWindow>();           \
     Name->setObjectName(FRAMELESSHELPER_STRING_LITERAL(#Name)); \
-    Name->waitReady(); \
+    Name->waitReady();                                          \
     Name->show();
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     Log::setup(FRAMELESSHELPER_STRING_LITERAL("mainwindow"));
 
     // Not necessary, but better call this function, before the construction
@@ -59,8 +58,8 @@ int main(int argc, char *argv[])
     FramelessConfig::instance()->set(Global::Option::EnableBlurBehindWindow);
     //FramelessConfig::instance()->set(Global::Option::DisableLazyInitializationForMicaMaterial);
 
-    CREATE_WINDOW(mainWindow1)
-    CREATE_WINDOW(mainWindow2)
+    // CREATE_WINDOW(mainWindow1)
+    // CREATE_WINDOW(mainWindow2)
     CREATE_WINDOW(mainWindow3)
 
     return QCoreApplication::exec();

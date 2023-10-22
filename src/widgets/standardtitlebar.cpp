@@ -430,7 +430,9 @@ void StandardTitleBarPrivate::initialize() {
     window->installEventFilter(this);
 }
 
-StandardTitleBar::StandardTitleBar(QWidget *parent) : QWidget(parent), d_ptr(new StandardTitleBarPrivate(this)) {
+StandardTitleBar::StandardTitleBar(QWidget *parent)
+    : QWidget(parent), d_ptr(std::make_unique<StandardTitleBarPrivate>(this))
+{
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setFixedHeight(kDefaultTitleBarHeight);
 #ifdef Q_OS_MACOS

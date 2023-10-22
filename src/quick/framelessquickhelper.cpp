@@ -145,7 +145,10 @@ FramelessQuickHelperPrivate::FramelessQuickHelperPrivate(FramelessQuickHelper *q
     connect(q_ptr, &FramelessQuickHelper::windowChanged, q_ptr, &FramelessQuickHelper::windowChanged2);
 }
 
-FramelessQuickHelperPrivate::~FramelessQuickHelperPrivate() = default;
+FramelessQuickHelperPrivate::~FramelessQuickHelperPrivate()
+{
+    detach();
+}
 
 FramelessQuickHelperPrivate *FramelessQuickHelperPrivate::get(FramelessQuickHelper *pub)
 {
@@ -416,18 +419,18 @@ void FramelessQuickHelperPrivate::doRepaintAllChildren()
         if (!window) {
             return;
         }
-#ifdef Q_OS_WINDOWS
+#if (defined(Q_OS_WINDOWS) && (QT_VERSION < QT_VERSION_CHECK(6, 5, 3)))
         // Sync the internal window frame margins with the latest DPI, otherwise
         // we will get wrong window sizes after the DPI change.
         std::ignore = Utils::updateInternalWindowFrameMargins(window, true);
-#endif // Q_OS_WINDOWS \
-    // No need to repaint the window when it's hidden.
+#endif // Q_OS_WINDOWS
+        // No need to repaint the window when it's hidden.
         if (!window->isVisible()) {
             return;
         }
         if (!((window->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized | Qt::WindowFullScreen)) || q->isWindowFixedSize())) {
             const QSize originalSize = window->size();
-            static constexpr const auto margins = QMargins{ 10, 10, 10, 10 };
+            static constexpr const auto margins = QMargins{ 1, 1, 1, 1 };
             window->resize(originalSize.shrunkBy(margins));
             window->resize(originalSize.grownBy(margins));
             window->resize(originalSize);
@@ -641,7 +644,7 @@ void FramelessQuickHelperPrivate::rebindWindow()
 }
 
 FramelessQuickHelper::FramelessQuickHelper(QQuickItem *parent)
-    : QQuickItem(parent), d_ptr(new FramelessQuickHelperPrivate(this))
+    : QQuickItem(parent), d_ptr(std::make_unique<FramelessQuickHelperPrivate>(this))
 {
 }
 

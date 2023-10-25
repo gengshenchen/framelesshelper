@@ -2,6 +2,7 @@ git clone --recursive https://github.com/wangwenx190/framelesshelper.git
 
 cmake -S . -B out -DCMAKE_PREFIX_PATH=C:\Qt\Qt5.14.2\5.14.2\msvc2017_64  -DCMAKE_INSTALL_PREFIX=C:\Users\17688\source\repos\karl-app\out\framelesshelper-install -DCMAKE_BUILD_TYPE=Release 
 
+-DFRAMELESSHELPER_BUILD_EXAMPLES=ON
 cmake --build out --config Release 
 cmake --install out --config Release 
 

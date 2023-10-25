@@ -97,15 +97,15 @@ QMenuBar::item:pressed {
 #if FRAMELESSHELPER_CONFIG(titlebar)
     const auto titleBarLayout = static_cast<QHBoxLayout *>(m_titleBar->layout());
 
-    // ´´½¨Ò»¸öÕ¼Î»·û£¬¼´Ò»¸ö¿ÕµÄ QWidget£¬ÓÃÓÚ²åÈë¼ä¾à
-    //setWindowIcon(QFileIconProvider().icon(QFileIconProvider::Computer));
-    setWindowIcon(QIcon("C:\\Users\\17688\\source\\repos\\karl-app\\resources\\icon/app.ico"));
+    // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Õ¼Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Õµï¿½ QWidgetï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½
+    setWindowIcon(QFileIconProvider().icon(QFileIconProvider::Computer));
+    //setWindowIcon(QIcon("C:\\Users\\17688\\source\\repos\\karl-app\\resources\\icon/app.ico"));
     m_titleBar->setWindowIconVisible(false);
     m_titleBar->setWindowIconSize(QSize(16, 16));
     //     QWidget *spacerWidget = new QWidget;
     QSize iconSize = m_titleBar->windowIconSize();
-    //     spacerWidget->setFixedSize(iconSize.width() + 16, iconSize.height() + 16);  // ÉèÖÃÕ¼Î»·û´óÐ¡£¬ÒÔ´´½¨¼ä¾à
-    //     titleBarLayout->insertWidget(0, spacerWidget);                              // Ìí¼ÓÕ¼Î»·û
+    //     spacerWidget->setFixedSize(iconSize.width() + 16, iconSize.height() + 16);  // ï¿½ï¿½ï¿½ï¿½Õ¼Î»ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //     titleBarLayout->insertWidget(0, spacerWidget);                              // ï¿½ï¿½ï¿½ï¿½Õ¼Î»ï¿½ï¿½
     //     titleBarLayout->insertWidget(1, mb);
     //     //
     titleBarLayout->insertSpacing(0, iconSize.width() + 16);
@@ -124,7 +124,7 @@ QMenuBar::item:pressed {
 #endif
 #endif
     helper->setHitTestVisible(mb);  // IMPORTANT!
-    setWindowTitle("hello world");
+    setWindowTitle(tr("hello world"));
     m_titleBar->show();
     resize(200, 100);
     //     connect(this, &MainWindow::objectNameChanged, this, [this](const QString &name) {
